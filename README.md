@@ -1,2 +1,21 @@
-# DIY-Harmonic-Equatorial-Mount
-Because I was tired of the heaviness of the EQ3D equatorial instrument, I planned to replace it with a more lightweight harmonic equatorial instrument. However, harmonic equatorial instruments on the market are too expensive (compared to the specifications under my DIY), so this project was born
+# DIY谐波赤道仪（待验证）
+
+由于我厌倦了EQ3D赤道仪的沉重，我计划用更轻便的谐波赤道仪来替换它，然而市面上的谐波赤道仪价格太贵（与DIY的规格相比），所以这个项目就此诞生，谐波赤道仪能够在不牺牲性能的前提下，提供高精度、便携性和经济性
+
+# 项目描述
+
+自制谐波赤道仪的核心谐波减速器，是基于Leaderdriver拆机二手的工业谐波减速器(也适用于淘宝购买的同规格谐波减速器如“25-100”)
+
+该项目旨在解决业余天文设备中的关键问题：
+- 商业支架价格高昂
+- 缺乏开放性和灵活性
+- 复杂性或与个人设置的不兼容
+
+此款DIY谐波赤道仪优势是：
+- 🧰**经济实惠**——总造价低于3000元，加工零件价格低于1500元
+- 🪶**相对便携**——不含底座重量5-6公斤
+- 🏗️**易于搭建**——专为拥有基本工具的创客设计
+- 💪**高性能**——精确跟踪（亚角秒级 RMS），无需配重
+⚠️**关于当前状态的重要说明**⚠️
+
+该项目正在持续开发中
