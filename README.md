@@ -28,8 +28,7 @@
 | 减速器类型 | leaderdrive LHS-25-100-C-III |
 | 控制系统 | OnStep/OnStepx |
 | 连接类型 | USB-B；WIFI；蓝牙；集成DS3231SN时钟芯片 |
-| 功能 | RA轴制动器；RA/DEC轴光电传感器限位；DEC/RA轴光电传感器原点；
-同时兼容step/dir，spi两种驱动模式(即兼容tmc2209，tmc5160)；12/24v输入 |
+| 功能 | RA轴制动器；RA/DEC轴光电传感器限位；DEC/RA轴光电传感器原点；<br>同时兼容step/dir，spi两种驱动模式(即兼容tmc2209，tmc5160)；12/24v输入 |
 | 预计成品 | 2200-2600 RMB |
 | 预计重量 | 9.5kg(包含鸠尾槽和纬度座) |
 
