@@ -1331,8 +1331,8 @@ void processCommands() {
         
         // --- 拦截条件：没回零，或者按了东且东面锁死，或者按了西且西面锁死 ---
         if (!systemHasHomed || (command[1] == 'e' && Axis1_LimitLock == 1) || (command[1] == 'w' && Axis1_LimitLock == -1)) {
-            boolReply = false;       // 告诉底层：不用返回字符
-            commandError = CE_NONE;  // 【核心修改】：伪装成无错误！彻底阻止底层向蓝牙疯狂吐日志！
+            boolReply = false;       // 告诉底层不用返回字符
+            commandError = CE_NONE;  // 伪装成无错误！彻底阻止底层向蓝牙疯狂吐日志！
         } else {
             // 如果通过了安全检查，才允许执行电机转动
             commandError=startGuideAxis1(command[1],currentGuideRate,GUIDE_TIME_LIMIT*1000,false);
@@ -1347,8 +1347,8 @@ void processCommands() {
         
         // --- 拦截条件：没回零，或者按了北且北面锁死，或者按了南且南面锁死 ---
         if (!systemHasHomed || (command[1] == 'n' && Axis2_LimitLock == 1) || (command[1] == 's' && Axis2_LimitLock == -1)) {
-            boolReply = false;       // 告诉底层：不用返回字符
-            commandError = CE_NONE;  // 【核心修改】：伪装成无错误！
+            boolReply = false;       // 告诉底层不用返回字符
+            commandError = CE_NONE;  // 伪装成无错误！
         } else {
             // 如果通过了安全检查，才允许执行电机转动
             commandError=startGuideAxis2(command[1],currentGuideRate,GUIDE_TIME_LIMIT*1000,false);
@@ -1404,7 +1404,7 @@ if (command[1] == 'S' && parameter[0] == 0)  {
             supress_frame = true;
             commandError = CE_PARKED; 
 
-            // 【新增这一行】：既然拦截了 GOTO，就顺手把可能被 APP 提前唤醒的跟踪也强制关掉
+            // 既然拦截了 GOTO，就顺手把可能被 APP 提前唤醒的跟踪也强制关掉
             trackingState = TrackingNone; 
 
         } else {
@@ -2089,7 +2089,7 @@ if (command[1] == 'S' && parameter[0] == 0)  {
 
       if (command[0] == 'T' && parameter[0] == 0) {
         // ==========================================================
-          // --- [核心修复] 开机未回零前，拦截开启跟踪，必须标准回复 '0' ---
+          // --- 开机未回零前，拦截开启跟踪，必须标准回复 '0' ---
           if (!systemHasHomed) {
               reply[0] = '0'; // 明确告诉 APP 被拒绝了，它就不会死等超时
               reply[1] = 0; 

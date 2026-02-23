@@ -565,8 +565,49 @@ void ST4() {
   if ( (altModeA || altModeB) && ((st4n.timeUp() < Shed_ms) || (st4s.timeUp() < Shed_ms) || (st4e.timeUp() < Shed_ms) || (st4w.timeUp() < Shed_ms)) ) {
     if (!cmdWaiting() && !homeTriggeredST4) {
        // ... 原有的副模式按键处理 ...
-       if (altModeA) { /* 原有调速代码 */ }
-       if (altModeB) { /* 原有调焦代码 */ }
+       if (altModeA) {
+        int c=currentGuideRate;
+        if (st4w.wasPressed() && !st4e.wasPressed()) {
+          if (trackingState == TrackingNone) cmdSend(":B+#",true); else { if (c >= 7) c=8; else if (c >= 5) c=7; else if (c >= 2) c=5; else if (c < 2) c=2; }
+          soundClick();
+        }
+        if (st4e.wasPressed() && !st4w.wasPressed()) {
+          if (trackingState == TrackingNone) cmdSend(":B-#",true); else { if (c <= 5) c=2; else if (c <= 7) c=5; else if (c <= 8) c=7; else if (c > 8) c=8; }
+          soundClick();
+        }
+        if (st4s.wasPressed() && !st4n.wasPressed()) {
+          if (alignThisStar > alignNumStars) cmdSend(":CS#",true); else cmdSend(":A+#",true);
+          soundClick(); 
+        }
+        if (st4n.wasPressed() && !st4s.wasPressed()) {
+          if (trackingState == TrackingSidereal) { trackingState=TrackingNone; disableStepperDrivers(); soundClick(); } else
+          if (trackingState == TrackingNone) { trackingState=TrackingSidereal; enableStepperDrivers(); soundClick(); }
+        }
+        if (c != currentGuideRate) { setGuideRate(c); enableGuideRate(c); }
+      }
+       if (altModeB) { 
+#if ST4_HAND_CONTROL_FOCUSER == ON
+        static int fs=0;
+        static int fn=0;
+        if (!fn && !fs) {
+          if (st4w.wasPressed() && !st4e.wasPressed()) { cmdSend(":F2#",true); soundClick(); }
+          if (st4e.wasPressed() && !st4w.wasPressed()) { cmdSend(":F1#",true); soundClick(); }
+        }
+        if (!fn) {
+          if (st4s.isDown() && st4n.isUp()) { if (fs == 0) { cmdSend(":FS#",true); fs++; } else if (fs == 1) { cmdSend(":F-#",true); fs++; } else if ((st4s.timeDown() > 4000) && (fs == 2)) { fs++; cmdSend(":FF#",true); } else if (fs == 3) { cmdSend(":F-#",true); fs++; } }
+          if (st4s.isUp()) { if (fs > 0) { cmdSend(":FQ#",true); fs=0; } }
+        }
+        if (!fs) {
+          if (st4n.isDown() && st4s.isUp()) { if (fn == 0) { cmdSend(":FS#",true); fn++; } else if (fn == 1) { cmdSend(":F+#",true); fn++; } else if ((st4n.timeDown() > 4000) && (fn == 2)) { fn++; cmdSend(":FF#",true); } else if (fn == 3) { cmdSend(":F+#",true); fn++; }  }
+          if (st4n.isUp()) { if (fn > 0) { cmdSend(":FQ#",true); fn=0; } }
+        }
+#else
+        if (st4w.wasPressed() && !st4e.wasPressed()) { cmdSend(":LN#",true); soundClick(); }
+        if (st4e.wasPressed() && !st4w.wasPressed()) { cmdSend(":LB#",true); soundClick(); }
+        if (st4s.wasPressed() && !st4n.wasPressed()) { soundEnabled=!soundEnabled; soundClick(); }
+        if (st4n.wasPressed() && !st4s.wasPressed()) { cmdSend(":LIG#",true); soundClick(); }
+#endif
+      }
     }
   } else {
     if ((altModeA || altModeB) && !homeTriggeredST4) { 
