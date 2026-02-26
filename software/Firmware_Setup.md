@@ -41,7 +41,7 @@ OnStep 在 ESP32 平台上的完整安装包含**两个独立步骤**（固件 +
 
 **第二步：上传 Smart Web Sever**
 通过 Wi-Fi 控制OnStep的行为依赖于存储在ESP07S闪存中的网页文件，由于PCB的紧凑设计，并没有给ESP07S留出单独的刷写通道，故需通过将ESP32作为转发桥梁来刷写固件
-* *注：在刷写ESP32时需要将`Config.h`中的`#define SERIAL_B_ESP_FLASHING`功能打开，并将PCB上对应的RST针脚进行跳线连接
+* *注：在刷写ESP32时需要将`Config.h`中的`#define SERIAL_B_ESP_FLASHING`功能打开，并将PCB上对应的RST针脚进行跳线帽连接
 ### 📡 ESP32 透传刷写 ESP07s (SmartWebServer) 指南
 
 请严格按照以下顺序执行，错一步都会导致刷写失败，若复刻的结构设计完全一样，参数就可以直接复制刷写
@@ -92,7 +92,7 @@ esptool.exe -p COM7 -b 115200 --before no_reset write_flash 0x00000 wifi.bin
 ```bash
 python -m esptool -p COM7 -b 115200 --before no_reset write_flash 0x00000 D:\wifi.bin
 ```
-
+* *注：刷写完成后即可将跳线帽取下
 ---
 
 ### 🔍 参数详解
