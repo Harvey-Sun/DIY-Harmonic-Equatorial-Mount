@@ -456,7 +456,7 @@ void ST4() {
   const long AltMode_ms=2000;
 
   // =================================================================
-  // 【修改核心】：长按3秒立即触发，附带按键屏蔽锁，保护电机脉冲
+  // 长按3秒立即触发，附带按键屏蔽锁，保护电机脉冲
   // =================================================================
   static bool homingLockout = false; // 屏蔽锁状态标志
 
@@ -467,7 +467,7 @@ void ST4() {
     if (!st4e.isDown() && !st4w.isDown() && !st4n.isDown() && !st4s.isDown()) {
       homingLockout = false; 
     }
-    return; // 【关键】拦截点！保护回原点过程不被打断
+    return; // 拦截点，保护回原点过程不被打断
   }
 
   // 2. 长按检测逻辑
@@ -477,7 +477,7 @@ void ST4() {
       
       // 如果按下的时间达到了 3000 毫秒（3秒）
       if ((st4e.timeDown() > 3000) && (st4w.timeDown() > 3000)) {
-        homingLockout = true; // 第一步：立刻上锁！忽略接下来的所有按键状态
+        homingLockout = true; // 第一步：立刻上锁，忽略接下来的所有按键状态
         soundBeep();          // 蜂鸣器滴一声（如果有），提示用户已经开始回原点了
         
         // 停止一切当前的追踪和导星动作
@@ -485,7 +485,7 @@ void ST4() {
         stopGuideAxis2();
         stopSlewingAndTracking(SS_ALL_FAST);
         
-        // 第二步：立刻触发回原点！不需要等松手。
+        // 第二步：立刻触发回原点，不需要等松手
         // 因为已经 homingLockout=true，下一毫秒程序循环时会直接在上面 return，不再干扰脉冲
         goHome(true); 
         return; 
