@@ -110,15 +110,15 @@ CommandErrors goHome(bool fast) {
     double secPerDeg=3600.0/(double)guideRates[8];
     findHomeTimeout=millis()+(unsigned long)(secPerDeg*180.0*1000.0);
     
-    // 8=HalfMaxRate
-    if (AXIS2_TANGENT_ARM == OFF) e=startGuideAxis1(a1,8,0,false);
-    if (e == CE_NONE) e=startGuideAxis2(a2,8,0,false,true);
+    // 8=HalfMaxRate半速，9＝全速
+    if (AXIS2_TANGENT_ARM == OFF) e=startGuideAxis1(a1,9,0,false);
+    if (e == CE_NONE) e=startGuideAxis2(a2,9,0,false,true);
     if (e == CE_NONE) VLF("MSG: Homing started phase 1"); else VLF("MSG: Homing start phase 1 failed");
   } else {
     findHomeMode=FH_SLOW;
     findHomeTimeout=millis()+30000UL;
     
-    // 7=48x sidereal
+    // 7=48x sidereal，8=HalfMaxRate半速
     if (AXIS2_TANGENT_ARM == OFF) e=startGuideAxis1(a1,7,0,false);
     if (e == CE_NONE) e=startGuideAxis2(a2,7,0,false,true);
     if (e == CE_NONE) VLF("MSG: Homing started phase 2"); else VLF("MSG: Homing start phase 2 failed");
