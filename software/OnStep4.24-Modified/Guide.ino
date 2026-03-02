@@ -396,10 +396,13 @@ void enableGuideRate(int g) {
   amountGuideAxis2.fixed=doubleToFixed((guideTimerBaseRateAxis2*stepsPerSecondAxis2)/100.0);
 }
 
-// handle the ST4 interface and hand controller features
+// =======================================================================
+// ST4() 函数
+// 处理 ST4 接口输入、智能手控器 (SHC) 通信、以及您的【长按回原点】功能
+// =======================================================================
 void ST4() {
 #if ST4_INTERFACE == ON || ST4_INTERFACE == ON_PULLUP
-  // get ST4 button presses
+  // 轮询按键状态
   st4e.poll();
   static bool shcActive=false;
   if (!shcActive) {
@@ -410,7 +413,9 @@ void ST4() {
 
 #if ST4_HAND_CONTROL == ON
 
-  // check for smart hand control
+  // ---------------------------------------------------------
+  // 智能手控器 (Smart Hand Controller) 检测逻辑
+  // ---------------------------------------------------------
   if (st4e.hasTone()) {
     if (!shcActive) {
       if (st4w.hasTone()) {
@@ -451,7 +456,10 @@ void ST4() {
     }
   }
 
-  // standard hand control
+  // ---------------------------------------------------------
+  // 标准手控器逻辑 (Standard Hand Control)
+  // 包含：组合按键功能、长按回原点功能
+  // ---------------------------------------------------------
   const long Shed_ms=4000;
   const long AltMode_ms=2000;
 
@@ -460,7 +468,7 @@ void ST4() {
   // =================================================================
   static bool homingLockout = false; // 屏蔽锁状态标志
 
-  // 1. 如果锁是开启的，说明已经触发了回原点，此时我们只检测是否松手
+  // 如果锁是开启的，说明已经触发了回原点，此时我们只检测是否松手
   if (homingLockout) {
     // 只要有任意一个按键还按着，就会直接 return 退出，彻底屏蔽干扰！
     // 直到四个按键全部松开，才解除屏蔽锁。
@@ -470,7 +478,7 @@ void ST4() {
     return; // 拦截点，保护回原点过程不被打断
   }
 
-  // 2. 长按检测逻辑
+  // 长按检测逻辑
   if ((trackingState != TrackingMoveTo) && (!waitingHome)) {
     // 检测是否同时按下了东键(E)和西键(W)
     if (st4e.isDown() && st4w.isDown()) {

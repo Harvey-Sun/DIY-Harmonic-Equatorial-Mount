@@ -78,7 +78,7 @@
 #define GUIDE_DISABLE_BACKLASH        OFF //    OFF，在 <= 1X 导星期间禁用齿隙补偿                          Option
 
 // 追踪行为 (TRACKING BEHAVIOUR) ---------------------------------------- 参见 https://onstep.groups.io/g/main/wiki/Configuration-Mount#TRACKING
-#define TRACK_AUTOSTART               OFF //    OFF，ON 启动时启用追踪。                                          Option
+#define TRACK_AUTOSTART               OFF //    OFF，ON 启动时启用追踪(已经修改成上电使能电机但不跟踪)                                         Option
 #define TRACK_REFRACTION_RATE_DEFAULT OFF //    OFF，ON 启动时带大气折射补偿（仅限 RA 轴/赤道仪）。   Option
 #define TRACK_BACKLASH_RATE            25 //     25, n。其中 n=2..50 (x 恒星时速率) 在齿隙补偿期间使用。               Option
                                           //         太快会导致电机堵转/齿轮撞击，太慢则齿隙补偿迟钝。
