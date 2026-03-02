@@ -194,29 +194,8 @@
       } else
 ```
 
-### 6. 拦截 Unpark 唤醒指令 (修改 `Command.ino`)
 
-**定位**: 搜索 `:hR#` 或 `Restore parked telescope`
-**修改逻辑**: 未回零前，仅返回 `0` 拒绝解除停放。
-
-```cpp
-      // :hR#       Restore parked telescope to operation
-      if (command[1] == 'R' && parameter[0] == 0) {
-        
-        // --- [新增] 开机未回零前，拦截 Unpark 并返回失败 ---
-        if (!systemHasHomed) {
-            reply[0] = '0'; // 返回 '0' 代表被拒绝
-            reply[1] = 0;   
-            boolReply = false;
-            supress_frame = true;
-            commandError = CE_PARKED;
-        } else {
-            commandError=unPark(true); 
-        }
-      } else
-```
-
-### 7. 优化智能脱困与单次急停防刷屏 (修改 `OnStep.ino`)
+### 6. 优化智能脱困与单次急停防刷屏 (修改 `OnStep.ino`)
 
 **定位**: 搜索 `loop2()` 中限位判断代码。
 **修改逻辑**: 移除易导致意外锁死的坐标推断逻辑，增加单次报错锁防刷屏。
