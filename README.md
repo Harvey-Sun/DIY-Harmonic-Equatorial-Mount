@@ -5,8 +5,11 @@
 # 项目描述
 
 自制谐波赤道仪的核心谐波减速器，是基于Leaderdriver拆机二手的工业谐波减速器(也适用于淘宝购买的同规格谐波减速器如“25-100”)
-![image.png](https://github.com/LeoJohn233/DIY-Harmonic-Equatorial-Mount/blob/main/pictures/3D-Views/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-03-03%20150618.png)
-![image.png]()
+![image.png](https://github.com/LeoJohn233/DIY-Harmonic-Equatorial-Mount/blob/main/pictures/3D-Views/1.png)
+![image.jpg](https://github.com/LeoJohn233/DIY-Harmonic-Equatorial-Mount/blob/main/pictures/3D-Views/3.jpg)
+![image.jpg](https://github.com/LeoJohn233/DIY-Harmonic-Equatorial-Mount/blob/main/pictures/3D-Views/5.JPG)
+![image.jpg](https://github.com/LeoJohn233/DIY-Harmonic-Equatorial-Mount/blob/main/pictures/3D-Views/4.jpg)
+![image.jpg](https://github.com/LeoJohn233/DIY-Harmonic-Equatorial-Mount/blob/main/pictures/3D-Views/2.jpg)
 
 该项目旨在解决业余天文设备中的关键问题：
 - 成品支架价格高昂
