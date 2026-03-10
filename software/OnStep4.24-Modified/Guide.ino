@@ -398,7 +398,7 @@ void enableGuideRate(int g) {
 
 // =======================================================================
 // ST4() 函数
-// 处理 ST4 接口输入、智能手控器 (SHC) 通信、以及您的【长按回原点】功能
+// 处理 ST4 接口输入、智能手控器 (SHC) 通信、以及长按回原点与 AltMode 功能
 // =======================================================================
 void ST4() {
 #if ST4_INTERFACE == ON || ST4_INTERFACE == ON_PULLUP
@@ -458,69 +458,71 @@ void ST4() {
 
   // ---------------------------------------------------------
   // 标准手控器逻辑 (Standard Hand Control)
-  // 包含：组合按键功能、长按回原点功能
+  // 包含：组合按键 AltMode 功能、长按3秒回原点功能
   // ---------------------------------------------------------
   const long Shed_ms=4000;
   const long AltMode_ms=2000;
 
+  // 提前声明 AltMode 状态变量，以便在 3 秒回原点时能强制复位它
+  static bool altModeA=false;
+  static bool altModeB=false;
+
   // =================================================================
-  // 长按3秒立即触发，附带按键屏蔽锁，保护电机脉冲
+  // 长按3秒触发回原点，附带按键屏蔽锁，保护电机脉冲
   // =================================================================
   static bool homingLockout = false; // 屏蔽锁状态标志
 
-  // 如果锁是开启的，说明已经触发了回原点，此时我们只检测是否松手
+  // 如果锁是开启的，说明已经触发了回原点，此时只检测是否松手
   if (homingLockout) {
-    // 只要有任意一个按键还按着，就会直接 return 退出，彻底屏蔽干扰！
-    // 直到四个按键全部松开，才解除屏蔽锁。
     if (!st4e.isDown() && !st4w.isDown() && !st4n.isDown() && !st4s.isDown()) {
       homingLockout = false; 
     }
-    return; // 拦截点，保护回原点过程不被打断
+    return; // 拦截点，彻底屏蔽干扰
   }
 
-  // 长按检测逻辑
+  // 长按 3 秒回原点检测逻辑
   if ((trackingState != TrackingMoveTo) && (!waitingHome)) {
-    // 检测是否同时按下了东键(E)和西键(W)
     if (st4e.isDown() && st4w.isDown()) {
       
       // 如果按下的时间达到了 3000 毫秒（3秒）
       if ((st4e.timeDown() > 3000) && (st4w.timeDown() > 3000)) {
-        homingLockout = true; // 第一步：立刻上锁，忽略接下来的所有按键状态
-        soundBeep();          // 蜂鸣器滴一声（如果有），提示用户已经开始回原点了
+        homingLockout = true; // 第一步：立刻上锁
+        soundBeep();          // 第二次蜂鸣提示音，代表触发回原点
+        
+        // 撤销在 2 秒时必然被触发的 AltModeA，防止赤道仪状态错乱
+        altModeA = false; 
         
         // 停止一切当前的追踪和导星动作
         stopGuideAxis1();
         stopGuideAxis2();
         stopSlewingAndTracking(SS_ALL_FAST);
         
-        // 第二步：立刻触发回原点，不需要等松手
-        // 因为已经 homingLockout=true，下一毫秒程序循环时会直接在上面 return，不再干扰脉冲
+        // 触发回原点
         goHome(true); 
         return; 
       }
-      
-      // 如果按下了，但是还没满 3 秒：
-      // 需要阻止原本的 AltMode 或常规导星逻辑触发，所以叫停轴 1 并立刻返回等待计时
-      stopGuideAxis1(); 
-      return; 
+      // 注意：这里删除了提前 return 的拦截，让未满 3 秒的状态能继续往下走到 AltMode 逻辑
     }
   }
   // =================================================================
 
-
-  // stop any guide that might be triggered by combination button presses
+  // 停止因组合按键触发的常规导星
   if (st4e.isDown() && st4w.isDown()) stopGuideAxis1(); 
   if (st4n.isDown() && st4s.isDown()) stopGuideAxis2();
   
-  // see if a combination was down for long enough for an alternate mode
-  static bool altModeA=false;
-  static bool altModeB=false;
+  // =================================================================
+  // AltMode 2秒组合键逻辑 (原版功能)
+  // =================================================================
   if ((trackingState != TrackingMoveTo) && (!waitingHome)) {
-    // 注意：如果是 E+W 组合键，在上面已经被拦截处理了，不会走到这里。
-    if ((st4e.timeDown() > AltMode_ms) && (st4w.timeDown() > AltMode_ms) && (!altModeB)) { if (!altModeA) { altModeA=true; soundBeep(); } }
-    if ((st4n.timeDown() > AltMode_ms) && (st4s.timeDown() > AltMode_ms) && (!altModeA)) { if (!altModeB) { altModeB=true; soundBeep(); } }
+    // 按满 2 秒时，触发 AltMode 并发出一声蜂鸣
+    if ((st4e.timeDown() > AltMode_ms) && (st4w.timeDown() > AltMode_ms) && (!altModeB)) { 
+      if (!altModeA) { altModeA=true; soundBeep(); } 
+    }
+    if ((st4n.timeDown() > AltMode_ms) && (st4s.timeDown() > AltMode_ms) && (!altModeA)) { 
+      if (!altModeB) { altModeB=true; soundBeep(); } 
+    }
   }
-  
+
   // if the alternate mode is allowed & selected & hasn't timed out, handle it
   if ( (altModeA || altModeB) && ((st4n.timeUp() < Shed_ms) || (st4s.timeUp() < Shed_ms) || (st4e.timeUp() < Shed_ms) || (st4w.timeUp() < Shed_ms)) ) {
 
